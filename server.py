@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""dsa_tracker_mcp — an MCP server for tracking DSA practice progress.
+"""dsa_tracker_mcp — This is an MCP server for tracking DSA practice progress.
 
 Tracks attempts at problems from a configurable problem list (NeetCode 150 by
 default, see seed_problems.py), with spaced-repetition review scheduling.
 
-Runs over stdio; designed for Claude Desktop. The SQLite database lives at
+Runs over stdio and designed for Claude Desktop. The SQLite database lives at
 ~/.dsa_tracker_mcp/progress.db unless overridden via the DSA_TRACKER_DB
 environment variable. The problem list can be replaced by setting
 DSA_TRACKER_PROBLEMS_FILE to a JSON file of your own problems — see
@@ -27,7 +27,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 import seed_problems
 
-# --- Database setup ---------------------------------------------------------
+# DB setup
 
 DEFAULT_DB_PATH = Path.home() / ".dsa_tracker_mcp" / "progress.db"
 DB_PATH = Path(os.environ.get("DSA_TRACKER_DB", DEFAULT_DB_PATH))
@@ -135,7 +135,7 @@ def init_db() -> None:
         conn.close()
 
 
-# --- Spaced repetition --------------------------------------------------------
+# Spaced repetition
 
 
 def _today() -> date:
@@ -165,7 +165,7 @@ def _next_review_date(status: str, confidence: Optional[int], from_date: date) -
     return (from_date + timedelta(days=days)).isoformat()
 
 
-# --- Problem lookup & status helpers ------------------------------------------
+#Problem lookup & status helpers
 
 
 def _find_problem(conn: sqlite3.Connection, name: str) -> Optional[sqlite3.Row]:
@@ -218,7 +218,7 @@ def _status_label(row: sqlite3.Row) -> str:
     return row["last_status"] or "not_started"
 
 
-# --- Enums & Pydantic input models ---------------------------------------------
+#Enums & Pydantic input models
 
 
 class AttemptStatus(str, Enum):
@@ -341,7 +341,7 @@ class GetProblemHistoryInput(BaseModel):
     )
 
 
-# --- MCP server -------------------------------------------------------------
+# MCP SERVER
 
 
 @asynccontextmanager
@@ -354,7 +354,7 @@ async def lifespan(_server: FastMCP) -> AsyncIterator[None]:
 mcp = FastMCP("dsa_tracker_mcp", lifespan=lifespan)
 
 
-# --- Tools -------------------------------------------------------------------
+# Tools (T)
 
 
 @mcp.tool(
@@ -733,7 +733,7 @@ async def problem_list_resource() -> str:
     return "\n".join(lines)
 
 
-# --- Prompts ----------------------------------------------------------------------
+# Prompts (P)
 
 
 @mcp.prompt(
