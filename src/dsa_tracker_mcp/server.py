@@ -25,7 +25,7 @@ from typing import Optional
 from mcp.server.fastmcp import FastMCP
 from pydantic import BaseModel, ConfigDict, Field
 
-import seed_problems
+from . import seed_problems
 
 # DB setup
 
@@ -763,5 +763,10 @@ def explain_pattern(category: str) -> str:
     )
 
 
-if __name__ == "__main__":
+def main():
+    """Entry point for the dsa-tracker-mcp console script."""
     mcp.run()  # stdio transport by default
+
+
+if __name__ == "__main__":
+    main()
