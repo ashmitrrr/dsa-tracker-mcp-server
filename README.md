@@ -1,4 +1,5 @@
 # dsa-tracker-mcp
+mcp-name: io.github.ashmitrrr/dsa-tracker-mcp-server
 
 This is an MCP server for tracking your progress through your DSA questions and comes loaded with a default list of Neetcode  150 (any custom DSA problem list can be switched per user) with built-in spaced repetition. Built with [FastMCP](https://github.com/modelcontextprotocol/python-sdk) and SQLite.
 
