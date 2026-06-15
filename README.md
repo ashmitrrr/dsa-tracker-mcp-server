@@ -1,7 +1,9 @@
 # dsa-tracker-mcp
 mcp-name: io.github.ashmitrrr/dsa-tracker-mcp-server
 
-This is an MCP server for tracking your progress through your DSA questions and comes loaded with a default list of Neetcode  150 (any custom DSA problem list can be switched per user) with built-in spaced repetition. Built with [FastMCP](https://github.com/modelcontextprotocol/python-sdk) and SQLite.
+[![PyPI](https://img.shields.io/pypi/v/dsa-tracker-mcp)](https://pypi.org/project/dsa-tracker-mcp/)
+
+This is an MCP server for tracking your progress through your DSA questions and comes loaded with a default list of NeetCode 150 (any custom DSA problem list can be switched per user) with built-in spaced repetition. Built with [FastMCP](https://github.com/modelcontextprotocol/python-sdk) and SQLite.
 
 Talk to it naturally from Claude: "what should I work on next", "log that I solved Two Sum, confidence 4, took 12 minutes", "how's my progress", "show me my history on Contains Duplicate".
 
@@ -34,15 +36,7 @@ Talk to it naturally from Claude: "what should I work on next", "log that I solv
 
 ## Installation
 
-```bash
-git clone https://github.com/ashmitrrr/dsa-tracker-mcp.git
-cd dsa-tracker-mcp
-python3 -m venv .venv
-source .venv/bin/activate   # on Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-```
-
-## Configuration
+dsa-tracker-mcp is published on [PyPI](https://pypi.org/project/dsa-tracker-mcp/), no manual cloning or virtual environments needed. The recommended way to run it is with [uv](https://docs.astral.sh/uv/), which downloads and runs the package on demand.
 
 ### Claude Desktop
 
@@ -52,8 +46,8 @@ Add to your `claude_desktop_config.json` (Settings → Developer → Edit Config
 {
   "mcpServers": {
     "dsa-tracker": {
-      "command": "/absolute/path/to/dsa-tracker-mcp/.venv/bin/python",
-      "args": ["/absolute/path/to/dsa-tracker-mcp/server.py"]
+      "command": "uvx",
+      "args": ["dsa-tracker-mcp"]
     }
   }
 }
@@ -61,14 +55,60 @@ Add to your `claude_desktop_config.json` (Settings → Developer → Edit Config
 
 Restart Claude Desktop completely after saving.
 
-### Environment variables (optional)
+### Alternative: pip install
+
+If you'd rather install it directly:
+
+```bash
+pip install dsa-tracker-mcp
+```
+
+Then point your config at the installed console script:
+
+```json
+{
+  "mcpServers": {
+    "dsa-tracker": {
+      "command": "dsa-tracker-mcp"
+    }
+  }
+}
+```
+
+### From source
+
+```bash
+git clone https://github.com/ashmitrrr/dsa-tracker-mcp-server.git
+cd dsa-tracker-mcp-server
+python3 -m venv .venv
+source .venv/bin/activate   # on Windows: .venv\Scripts\activate
+pip install -e .
+```
+
+## Environment variables (optional)
 
 | Variable | Default | Description |
 |---|---|---|
 | `DSA_TRACKER_DB` | `~/.dsa_tracker_mcp/progress.db` | Path to the SQLite database |
 | `DSA_TRACKER_PROBLEMS_FILE` | (none, uses built-in NeetCode 150) | Path to a JSON file with a custom problem list |
 
-#### Custom problem list format
+To set these with `uvx`, add an `env` block to your config:
+
+```json
+{
+  "mcpServers": {
+    "dsa-tracker": {
+      "command": "uvx",
+      "args": ["dsa-tracker-mcp"],
+      "env": {
+        "DSA_TRACKER_PROBLEMS_FILE": "/absolute/path/to/my-problems.json"
+      }
+    }
+  }
+}
+```
+
+### Custom problem list format
 
 ```json
 [
